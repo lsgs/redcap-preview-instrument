@@ -1,0 +1,13 @@
+{
+	"name": "Preview Instrument",
+	"description": "Preview an instrument from the Online Designer with data from a selected (existing) record/event/instrument.",
+	"namespace": "MCRI\\PreviewInstrument",
+	"authors": [
+		{
+			"name": "Luke Stevens",
+			"email": "luke.stevens@mcri.edu.au",
+			"institution": "Murdoch Children's Research Institute"
+		}
+	],
+    "framework-version": 15
+}
