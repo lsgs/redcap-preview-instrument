@@ -52,6 +52,7 @@ class PreviewInstrument extends AbstractExternalModule
         </div>
         <style type="text/css">
             #PreviewInstrument_button, #PreviewInstrument_dialog, #PreviewInstrument_display { display: none; }
+            #PreviewInstrument_button { float: right; }
         </style>
         <script type="text/javascript">
             let module = <?=$this->getJavascriptModuleObjectName()?>;
@@ -107,19 +108,13 @@ class PreviewInstrument extends AbstractExternalModule
                 $('#PreviewInstrument_embed').attr('height', module.dialogEmbedHeight);
                 $('#PreviewInstrument_embed').attr('width', module.dialogEmbedWidth);
                 $('#PreviewInstrument_embed').attr('src', app_path_webroot+'DataEntry/index.php?pid='+pid+'&id='+rec+'&event_id='+evt+'&page='+module.instrument+'&instance='+i+'&em_preview_instrument=1');
-//                $.get( 
-//                    app_path_webroot+'DataEntry/index.php', 
-//                    { pid: pid, id: rec, event_id: evt, page: module.instrument, instance: i, em_preview_instrument: 1 } 
-//                ).done(function( data ) {
-//                    $('#PreviewInstrument_content').html(data);
-//                });
             };
 
             module.init = function() {
                 if (module.enablePreview) {
                     $('#PreviewInstrument_button').on('click', module.previewClick);
                 }
-                $('#PreviewInstrument_button').appendTo($('#form_menu_description_label').parent('td').siblings(':last')).show();
+                $('#PreviewInstrument_button').insertAfter($('#form_menu_description_label')).show();
             };
 
             $(document).ready(function(){
@@ -153,7 +148,15 @@ class PreviewInstrument extends AbstractExternalModule
                 $('#center').siblings('div').remove();
                 $('#form').siblings('div').remove();
                 $('.dataEntryLeavePageBtn,.dataEntrySaveLeavePageBtn').remove();
-                window.onbeforeunload = null;
+                $(window).on('load', function(){
+                    window.onbeforeunload = null;
+                    formSubmitDataEntry = function() { 
+                        return false; 
+                    };
+                    form.submit = function() { 
+                        return false; 
+                    };
+                });
             })();
         </script>
         <?php
