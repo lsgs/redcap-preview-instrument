@@ -39,6 +39,8 @@ class PreviewInstrument extends AbstractExternalModule
             $btnPreviewInstrumentRecord = '<button id="PreviewInstrument_button" class="btn btn-xs btn-light fs13" href="javascript:;">'.$functionLabel.'</button>';
             $previewDialog = $this->makeRecordEventInstanceSelectionDialog($instrument);
         }
+        $formLabelSelector = (\REDCap::versionCompare(REDCAP_VERSION, '15.1.0', '>=')) ? 'form-menu-description': 'form_menu_description_label';
+
         $this->initializeJavascriptModuleObject();
         ?>
         <!--Preview Instrument content, style and script-->
@@ -114,13 +116,14 @@ class PreviewInstrument extends AbstractExternalModule
                 if (module.enablePreview) {
                     $('#PreviewInstrument_button').on('click', module.previewClick);
                 }
-                $('#PreviewInstrument_button').insertAfter($('#form_menu_description_label')).show();
+                $('#PreviewInstrument_button').insertAfter($('#<?=$formLabelSelector?>')).show();
             };
 
             $(document).ready(function(){
                 module.init();
             });
         </script>
+        <!--Preview Instrument content end-->
         <?php
     }
     
@@ -181,6 +184,14 @@ class PreviewInstrument extends AbstractExternalModule
             if ($attrs['form_name']==$instrument) {
                 if ($attrs['form_menu_description']!='') $Proj->forms[$instrument]['menu'] = $attrs['form_menu_description'];
                 $Proj->forms[$instrument]['fields'][$draftFieldName] = $attrs['element_label'];
+            }
+        }
+
+        // from v15.2.0 can use SAVE-PROMPT-EXEMPT to assist with save avoidance
+        if (\REDCap::versionCompare(REDCAP_VERSION, '15.2.0', '>=')) {
+            foreach ($Proj->metadata as $fieldName => $attrs) {
+                $attrs['misc'] .= ' @SAVE-PROMPT-EXEMPT';
+                $Proj->metadata[$fieldName] = $attrs['element_label'];
             }
         }
     }
