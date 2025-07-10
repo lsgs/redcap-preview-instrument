@@ -11,7 +11,7 @@ Preview an instrument from the Online Designer with data from a selected (existi
 
 If a project is in Draft Mode then the *draft* version of the instrument is utilised for the preview.
 
-### Known Issue
+### Limitation
 
 Release v1.0.0: altered calculated fields and `@CALCTEXT` expressions do not function in the preview.
 

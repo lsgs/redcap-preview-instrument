@@ -171,27 +171,29 @@ class PreviewInstrument extends AbstractExternalModule
      */
     protected function setMetadata($instrument) {
         global $Proj, $user_rights;
-        if ($Proj->project['draft_mode']!='1') return;
 
-        if (!array_key_exists($instrument, $Proj->forms)) {
-            // new draft form, enable edit rights for preview
-            $user_rights['forms'][$instrument] = '1';
-        }
+        if ($Proj->project['draft_mode']=='1') {
 
-        $Proj->metadata = $Proj->metadata_temp;
-        $Proj->forms[$instrument]['fields'] = array();
-        foreach ($Proj->metadata_temp as $draftFieldName => $attrs) {
-            if ($attrs['form_name']==$instrument) {
-                if ($attrs['form_menu_description']!='') $Proj->forms[$instrument]['menu'] = $attrs['form_menu_description'];
-                $Proj->forms[$instrument]['fields'][$draftFieldName] = $attrs['element_label'];
+            if (!array_key_exists($instrument, $Proj->forms)) {
+                // new draft form, enable edit rights for preview
+                $user_rights['forms'][$instrument] = '1';
+            }
+
+            $Proj->metadata = $Proj->metadata_temp;
+            $Proj->forms[$instrument]['fields'] = array();
+            foreach ($Proj->metadata_temp as $draftFieldName => $attrs) {
+                if ($attrs['form_name']==$instrument) {
+                    if ($attrs['form_menu_description']!='') $Proj->forms[$instrument]['menu'] = $attrs['form_menu_description'];
+                    $Proj->forms[$instrument]['fields'][$draftFieldName] = $attrs['element_label'];
+                }
             }
         }
-
+        
         // from v15.2.0 can use SAVE-PROMPT-EXEMPT to assist with save avoidance
         if (\REDCap::versionCompare(REDCAP_VERSION, '15.2.0', '>=')) {
             foreach ($Proj->metadata as $fieldName => $attrs) {
                 $attrs['misc'] .= ' @SAVE-PROMPT-EXEMPT';
-                $Proj->metadata[$fieldName] = $attrs['element_label'];
+                $Proj->metadata[$fieldName] = $attrs;
             }
         }
     }
