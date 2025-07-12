@@ -190,7 +190,7 @@ class PreviewInstrument extends AbstractExternalModule
         }
         
         // from v15.2.0 can use SAVE-PROMPT-EXEMPT to assist with save avoidance
-        if (\REDCap::versionCompare(REDCAP_VERSION, '15.2.0', '>=')) {
+        if (\REDCap::versionCompare(REDCAP_VERSION, '15.2.0', '>=') && isset($_GET['em_preview_instrument'])) {
             foreach ($Proj->metadata as $fieldName => $attrs) {
                 $attrs['misc'] .= ' @SAVE-PROMPT-EXEMPT';
                 $Proj->metadata[$fieldName] = $attrs;
